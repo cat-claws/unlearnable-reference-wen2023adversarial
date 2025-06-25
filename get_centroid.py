@@ -61,7 +61,7 @@ if args.dataset == 'CIFAR10':
 elif args.dataset == 'CIFAR100':
     testset = torchvision.datasets.CIFAR100(
         root=args.data_path, train=False, download=False, transform=transform_test)
-elif args.dataset == 'TinyImagenet': # add Tiny-Imagenet
+elif args.dataset == 'TinyImageNet': # add Tiny-Imagenet
     testset = torch.hub.load('cat-claws/datasets', 'TinyImagenet', path = 'zh-plus/tiny-imagenet', split='valid', transform = transform_test)
 testloader = torch.utils.data.DataLoader(
     testset, batch_size=100, shuffle=False, num_workers=0)

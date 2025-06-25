@@ -42,7 +42,8 @@ def construct_datasets(dataset, data_path, normalize=True):
         else:
             data_mean, data_std = mnist_mean, mnist_std
     elif dataset == 'TinyImageNet':
-        trainset = TinyImageNet(root=data_path, split='train', transform=transforms.ToTensor())
+        # trainset = TinyImageNet(root=data_path, split='train', transform=transforms.ToTensor()) # No available data path provided
+        trainset = torch.hub.load('cat-claws/datasets', 'TinyImagenet', path = 'zh-plus/tiny-imagenet', split='train', indexed = True, transform = transforms.ToTensor())
         if tiny_imagenet_mean is None:
             cc = torch.cat([trainset[i][0].reshape(3, -1) for i in range(len(trainset))], dim=1)
             data_mean = torch.mean(cc, dim=1).tolist()
@@ -86,7 +87,8 @@ def construct_datasets(dataset, data_path, normalize=True):
     elif dataset == 'MNIST':
         validset = MNIST(root=data_path, train=False, download=True, transform=transform_valid)
     elif dataset == 'TinyImageNet':
-        validset = TinyImageNet(root=data_path, split='val', transform=transform_valid)
+        # validset = TinyImageNet(root=data_path, split='val', transform=transform_valid) # No available data path provided
+        validset = torch.hub.load('cat-claws/datasets', 'TinyImagenet', path = 'zh-plus/tiny-imagenet', split='valid', transform = transform_valid)
     
 
     if normalize:

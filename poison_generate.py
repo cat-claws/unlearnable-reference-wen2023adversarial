@@ -21,7 +21,7 @@ if __name__ == "__main__":
     setup = system_startup(args)
 
     print('-----------------Load Reference Model-----------------------')
-    net = ResNetEmb18(num_classes=10).to(setup['device'])
+    net = ResNetEmb18(num_classes=args.num_classes).to(setup['device']) # Not hardcoded to be 10 classes
     net.load_state_dict(torch.load(os.path.join(args.reference_path,args.dataset+'_eps_'+str(int(args.robust_eps))+'.pth'), map_location=setup['device']))
     print('-----------------Load Successfully-----------------------')
 

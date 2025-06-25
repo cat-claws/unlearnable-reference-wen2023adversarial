@@ -37,7 +37,7 @@ ds = torch.tensor([[[[1]],[[1]],[[1]]]]).to(device)
 
 
 transform_train = transforms.Compose([
-    transforms.RandomCrop(32, padding=4),
+    # transforms.RandomCrop(32, padding=4), # not applicable to Tiny-Imagenet
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
     ])
@@ -48,12 +48,15 @@ transform_test = transforms.Compose([
 
 if args.dataset == 'CIFAR10':
     baseset = torchvision.datasets.CIFAR10(
-        root=args.data_path, train=True, download=False, transform=transform_train)
+        root=args.data_path, train=True, download=True, transform=transform_train)
     num_class = 10
 elif args.dataset == 'CIFAR100':
     baseset = torchvision.datasets.CIFAR100(
-        root=args.data_path, train=True, download=False, transform=transform_train)
+        root=args.data_path, train=True, download=True, transform=transform_train)
     num_class = 100
+elif args.dataset == 'TinyImageNet': # add Tiny-Imagenet
+    baseset = torch.hub.load('cat-claws/datasets', 'TinyImagenet', path = 'zh-plus/tiny-imagenet', split='train', transform = transform_train)
+    num_class = 200
 
 
 trainloader = torch.utils.data.DataLoader(
@@ -65,6 +68,9 @@ if args.dataset == 'CIFAR10':
 elif args.dataset == 'CIFAR100':
     testset = torchvision.datasets.CIFAR100(
         root=args.data_path, train=False, download=False, transform=transform_test)
+elif args.dataset == 'TinyImageNet':
+    testset = torch.hub.load('cat-claws/datasets', 'TinyImagenet', path = 'zh-plus/tiny-imagenet', split='valid', transform = transform_test)
+
 testloader = torch.utils.data.DataLoader(
     testset, batch_size=100, shuffle=False, num_workers=0)
 

@@ -36,7 +36,9 @@ elif args.dataset == 'CIFAR100':
     baseset = torchvision.datasets.CIFAR100(
         root=args.data_path, train=True, download=False, transform=transforms.ToTensor())
     num_class = 100
-
+elif args.dataset == 'TinyImageNet': # add Tiny-Imagenet
+    baseset = torch.hub.load('cat-claws/datasets', 'TinyImagenet', path = 'zh-plus/tiny-imagenet', split='train', transform = transforms.ToTensor())
+    num_class = 200
 
 
 transform_train = transforms.Compose([
@@ -59,14 +61,16 @@ if args.dataset == 'CIFAR10':
 elif args.dataset == 'CIFAR100':
     testset = torchvision.datasets.CIFAR100(
         root=args.data_path, train=False, download=False, transform=transform_test)
+elif args.dataset == 'TinyImagenet': # add Tiny-Imagenet
+    testset = torch.hub.load('cat-claws/datasets', 'TinyImagenet', path = 'zh-plus/tiny-imagenet', split='valid', transform = transform_test)
 testloader = torch.utils.data.DataLoader(
     testset, batch_size=100, shuffle=False, num_workers=0)
 
 
 def get_emb(net,trainloader):
     net.eval()
-    emb_list = [np.zeros(512) for i in range(10)]
-    cnt = [0 for i in range(10)]
+    emb_list = [np.zeros(512) for i in range(num_class)]
+    cnt = [0 for i in range(num_class)]
     for batch_idx, (inputs, targets) in enumerate(trainloader):
         inputs = inputs.to(device)
         batch_size = targets.size(0)
@@ -75,7 +79,7 @@ def get_emb(net,trainloader):
         for i in range(targets.shape[0]):
             emb_list[targets[i].item()]+=embeddings[i]
             cnt[targets[i].item()]+= 1
-    for i in range(10):
+    for i in range(num_class):
         emb_list[i] = emb_list[i] / cnt[i]
     return emb_list
 

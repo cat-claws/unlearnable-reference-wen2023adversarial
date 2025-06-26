@@ -1,4 +1,4 @@
-# An unlearnable
+# An method to create unlearnable examples
 
 > **Note:** This is a **cleaned-up and fixed version** of the original repository by [Wen et al.](https://openreview.net/pdf?id=zKvm1ETDOq).
 
@@ -43,3 +43,10 @@ To **review the specific changes**, refer to the commit history:
  The poison budget can be controlled by adjusting ```--eps```.
  You can select the poisoning method by setting ```--recipe push``` corresponding to EntF-Push or ```--recipe pull``` corresponding to EntF-Pull.
 
+### Step 4 (optional): Upload examples
+```
+pip install git+https://github.com/cestwc/sharpen/
+
+sharpen push-images --images AT_T_noise_8_8_push/data --labels hf://datasets/zh-plus/tiny-imagenet/data/train-00000-of-00001-1359597a978bc4fa.parquet --repo your-repo --config-name some-tinyimagenet
+```
+These examples will be uploaded to Huggingface datasets.
